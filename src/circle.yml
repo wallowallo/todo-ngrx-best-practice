@@ -1,0 +1,8 @@
+machine:
+  node:
+    version: 7.6.0
+## Customize test commands
+test:
+  override:
+    - ng lint
+    - ng test --watch false # single test run
