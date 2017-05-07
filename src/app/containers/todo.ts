@@ -2,9 +2,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Store, provideStore } from '@ngrx/store';
 import { Todo } from '../models/todo';
 import { todos } from "../reducers/todos";
-//import { filter } from "../reducers/filter";
-import { Observable } from "rxjs/Observable";
-import 'rxjs/add/operator/let';
+import { filter } from "../reducers/filter";
+import { Observable } from "rxjs/Rx";
+import 'rxjs/add/operator/combineLatest';
 
 
 @Component({
@@ -12,6 +12,10 @@ import 'rxjs/add/operator/let';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h2>Todo list</h2>
+    <todo-filter
+       (updateFilter)="updateFilter($event)"
+    >
+    </todo-filter>
     <todo-input
       (addTodo)="addTodo($event)"
     >
@@ -26,10 +30,16 @@ import 'rxjs/add/operator/let';
 })
 
 export class TodoComponent {
-  public todos: Observable<Todo[]>;
+  public todos;
 
   constructor(private store: Store<any>) {
-    this.todos = store.select('todos');
+    this.todos = Observable.combineLatest(
+			store.select('todos'),
+			store.select('filter'),
+			(todos: Todo[], filter: any) => {
+        return todos.filter(filter);
+      }
+    )
   }
 
   addTodo(text) {
@@ -50,5 +60,9 @@ export class TodoComponent {
 
 	toggleCompleted({id}) {
 		this.store.dispatch({ type: "TOGGLE_TODO_COMPLETED", payload: id });
+	}
+
+  updateFilter(filter) {
+		this.store.dispatch({ type: filter });
 	}
 }

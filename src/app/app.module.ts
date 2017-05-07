@@ -7,6 +7,7 @@ import { HttpModule } from '@angular/http';
 import { environment } from '../environments/environment';
 
 import { TodoComponent } from './containers/todo';
+import { TodoFilter } from './components/todo-filter';
 import { TodoInput } from './components/todo-input';
 import { TodoList } from './components/todo-list';
 
@@ -17,13 +18,16 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { MaterialModule } from '@angular/material';
 
 import { todos } from './reducers/todos';
+import { filter } from './reducers/filter';
 
 export interface State {
-  todos
+  todos,
+  filter
 }
 
 const reducers = {
-  todos
+  todos,
+  filter
 };
 
 const developmentReducer: ActionReducer<State> = compose(combineReducers)(reducers);
@@ -42,7 +46,8 @@ export function reducer(state: any, action: any) {
   declarations: [
     TodoComponent,
     TodoInput,
-    TodoList
+    TodoList,
+    TodoFilter
   ],
   imports: [
     CommonModule,
