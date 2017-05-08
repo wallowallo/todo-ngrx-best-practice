@@ -17,8 +17,8 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TodoList {
-    @Input() todos;
-    @Output() removeTodo = new EventEmitter();
-    @Output() toggleCompleted = new EventEmitter();
+export class TodoListComponent {
+  @Input() todos;
+  @Output() removeTodo = new EventEmitter();
+  @Output() toggleCompleted = new EventEmitter();
 }

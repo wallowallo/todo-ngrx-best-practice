@@ -7,9 +7,9 @@ import { HttpModule } from '@angular/http';
 import { environment } from '../environments/environment';
 
 import { TodoComponent } from './containers/todo';
-import { TodoFilter } from './components/todo-filter';
-import { TodoInput } from './components/todo-input';
-import { TodoList } from './components/todo-list';
+import { TodoFilterComponent } from './components/todo-filter';
+import { TodoInputComponent } from './components/todo-input';
+import { TodoListComponent } from './components/todo-list';
 
 import { StoreModule, combineReducers, ActionReducer } from '@ngrx/store';
 import { compose } from '@ngrx/core/compose';
@@ -21,8 +21,8 @@ import { todos } from './reducers/todos';
 import { filter } from './reducers/filter';
 
 export interface State {
-  todos,
-  filter
+  todos;
+  filter;
 }
 
 const reducers = {
@@ -45,9 +45,9 @@ export function reducer(state: any, action: any) {
 @NgModule({
   declarations: [
     TodoComponent,
-    TodoInput,
-    TodoList,
-    TodoFilter
+    TodoInputComponent,
+    TodoListComponent,
+    TodoFilterComponent
   ],
   imports: [
     CommonModule,
@@ -58,7 +58,7 @@ export function reducer(state: any, action: any) {
     MaterialModule,
     StoreModule.provideStore(reducer),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
-    //EffectsModule.run(BookEffects)
+    // EffectsModule.run(BookEffects)
   ],
   providers: [],
   bootstrap: [TodoComponent]
