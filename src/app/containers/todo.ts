@@ -46,7 +46,6 @@ export class TodoComponent {
     this.store.dispatch({ type: 'ADD_TODO', payload: {
       id: new Date().getTime(),
       text,
-      isEdit: false,
       completed: false,
       dateAdded: new Date()
     }});
