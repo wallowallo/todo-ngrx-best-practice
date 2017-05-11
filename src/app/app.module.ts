@@ -7,7 +7,7 @@ import { HttpModule } from '@angular/http';
 import { environment } from '../environments/environment';
 
 import { TodoComponent } from './containers/todo';
-import { TodoFilterComponent } from './components/todo-filter';
+import { FilterSelectComponent } from './components/filter-select';
 import { TodoInputComponent } from './components/todo-input';
 import { TodoListComponent } from './components/todo-list';
 
@@ -19,14 +19,16 @@ import { MaterialModule } from '@angular/material';
 
 import { todos } from './reducers/todos';
 import { filter } from './reducers/filter';
+import { undoable } from './reducers/undoable';
 
 export interface State {
   todos;
   filter;
+  undoable;
 }
 
 const reducers = {
-  todos,
+  todos: undoable(todos),
   filter
 };
 
@@ -47,7 +49,7 @@ export function reducer(state: any, action: any) {
     TodoComponent,
     TodoInputComponent,
     TodoListComponent,
-    TodoFilterComponent
+    FilterSelectComponent
   ],
   imports: [
     CommonModule,

@@ -1,10 +1,12 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Store, provideStore } from '@ngrx/store';
-import { Todo } from '../models/todo';
+import { Store } from '@ngrx/store';
 import { todos } from '../reducers/todos';
 import { filter } from '../reducers/filter';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/combineLatest';
+
+import { ADD_TODO, REMOVE_TODO, TOGGLE_TODO_COMPLETED, UNDO, REDO } from '../actions/actions';
+import { AppState, Todo, TodoModel } from "../interfaces/interfaces";
 
 
 @Component({
@@ -12,16 +14,24 @@ import 'rxjs/add/operator/combineLatest';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h2>Todo list</h2>
-    <todo-filter
-      (updateFilter)="updateFilter($event)"
+    <filter-select
+      (filterSelect)="updateFilter($event)"
     >
-    </todo-filter>
+    </filter-select>
     <todo-input
       (addTodo)="addTodo($event)"
     >
     </todo-input>
+    <button
+				(click)="undo()">
+				Undo
+			</button>
+			<button
+				(click)="redo()">
+				Redo
+			</button>
     <todo-list
-      [todos]="todos | async"
+      [todosModel]="todosModel$ | async"
       (toggleCompleted)="toggleCompleted($event)"
       (removeTodo)="removeTodo($event)"
     >
@@ -30,20 +40,27 @@ import 'rxjs/add/operator/combineLatest';
 })
 
 export class TodoComponent {
-  public todos: Observable<Todo[]>;
+  todosModel$ : Observable<TodoModel>;
 
-  constructor(private store: Store<any>) {
-    this.todos = Observable.combineLatest(
-		  store.select('todos'),
-			store.select('filter'),
-			(todos: Todo[], filter: any) => {
-        return todos.filter(filter);
+  constructor(private store: Store<AppState>) {
+    const todos$ = store.select('todos');
+		const filter$ = store.select('filter');
+
+    this.todosModel$ = Observable.combineLatest(
+		  todos$,
+			filter$,
+			({ present = [] }, filter : any) => {
+        return {
+  			  filteredTodos: present.filter(filter),
+  				totalTodos: present.length,
+  				completedTodos: present.filter((todo : Todo) => todo.completed).length
+  			}
       }
     );
   }
 
-  addTodo(text) {
-    this.store.dispatch({ type: 'ADD_TODO', payload: {
+  addTodo(text: string) {
+    this.store.dispatch({ type: ADD_TODO, payload: {
       id: new Date().getTime(),
       text,
       completed: false,
@@ -51,16 +68,24 @@ export class TodoComponent {
     }});
   }
 
-  removeTodo({id}) {
-	  this.store.dispatch({ type: 'REMOVE_TODO', payload: id });
+  removeTodo(id : number) {
+	  this.store.dispatch({ type: REMOVE_TODO, payload: id });
 	}
 
 
-	toggleCompleted({id}) {
-		this.store.dispatch({ type: 'TOGGLE_TODO_COMPLETED', payload: id });
+	toggleCompleted(id : number) {
+		this.store.dispatch({ type: TOGGLE_TODO_COMPLETED, payload: id });
 	}
 
   updateFilter(filter) {
 		this.store.dispatch({ type: filter });
+	}
+
+  undo(){
+		this.store.dispatch({type: UNDO});
+	}
+
+  redo(){
+		this.store.dispatch({type: REDO});
 	}
 }

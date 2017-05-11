@@ -10,7 +10,7 @@ import { Component, Output, EventEmitter, ChangeDetectionStrategy } from '@angul
 })
 
 export class TodoInputComponent {
-  @Output() addTodo = new EventEmitter();
+  @Output() addTodo : EventEmitter<string> = new EventEmitter<string>();
 
   add(todoInput) {
     this.addTodo.emit(todoInput.value);

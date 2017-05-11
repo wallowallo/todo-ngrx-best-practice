@@ -1,5 +1,8 @@
-export const filter = ( state = todo => todo, { type } = { type: '' } ) => {
-  switch ( type ) {
+import { ActionReducer, Action } from "@ngrx/store";
+import { SHOW_COMPLETED, SHOW_UNCOMPLETED, SHOW_ALL } from "../actions/actions";
+
+export const filter : ActionReducer<any> = (state : any = t => t, action : Action) => {
+  switch ( action.type ) {
     case 'SHOW_UNCOMPLETED':
       return todo => !todo.completed;
 

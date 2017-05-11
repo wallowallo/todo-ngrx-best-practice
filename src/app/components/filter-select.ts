@@ -1,9 +1,9 @@
 import { Component, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'todo-filter',
+  selector: 'filter-select',
   template: `
-    <select #selectList (change)="updateFilter.emit(selectList.value)">
+    <select #selectList (change)="filterSelect.emit(selectList.value)">
       <option *ngFor="let filter of filters" value="{{filter.action}}">
         {{filter.friendly}}
       </option>
@@ -12,11 +12,11 @@ import { Component, Output, EventEmitter, ChangeDetectionStrategy } from '@angul
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TodoFilterComponent {
+export class FilterSelectComponent {
   public filters = [
     { friendly: 'All', action: 'SHOW_ALL' },
     { friendly: 'Uncompleted', action: 'SHOW_UNCOMPLETED' },
     { friendly: 'Completed', action: 'SHOW_COMPLETED' }
   ];
-  @Output() updateFilter: EventEmitter<string> = new EventEmitter<string>();
+  @Output() filterSelect: EventEmitter<string> = new EventEmitter<string>();
 }
