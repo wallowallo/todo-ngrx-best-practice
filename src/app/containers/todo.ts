@@ -82,10 +82,10 @@ export class TodoComponent {
 	}
 
   undo(){
-		this.store.dispatch({type: UNDO});
+		this.store.dispatch({ type: UNDO });
 	}
 
   redo(){
-		this.store.dispatch({type: REDO});
+		this.store.dispatch({ type: REDO });
 	}
 }
